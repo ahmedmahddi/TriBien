@@ -1,13 +1,13 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { Text, View } from "react-native";
+import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faHome,
-  faCalendarAlt,
-  faGift,
-  faRecycle,
+  faChartBar,
+  faUser,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 
 const TabIcon = ({
@@ -75,41 +75,41 @@ const _Layout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Pickups",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={faHome} title="Home" />
+            <TabIcon focused={focused} icon={faHome} title="Pickups" />
           ),
         }}
       />
 
       <Tabs.Screen
-        name="schedule"
+        name="tasks"
         options={{
-          title: "Schedule",
+          title: "My Tasks",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={faCalendarAlt} title="Schedule" />
+            <TabIcon focused={focused} icon={faHistory} title="Tasks" />
           ),
         }}
       />
       <Tabs.Screen
-        name="catalog"
+        name="earnings"
         options={{
-          title: "Catalog",
+          title: "Earnings",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={faRecycle} title="Catalog" />
+            <TabIcon focused={focused} icon={faChartBar} title="Earnings" />
           ),
         }}
       />
       <Tabs.Screen
-        name="rewards"
+        name="profile"
         options={{
-          title: "Rewards",
+          title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={faGift} title="Rewards" />
+            <TabIcon focused={focused} icon={faUser} title="Profile" />
           ),
         }}
       />

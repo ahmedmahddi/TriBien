@@ -1,29 +1,79 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import NotificationProvider from "@/context/NotificationContext";
+import UserProvider from "@/context/UserContext";
+import { Stack, useRouter } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useCallback, useEffect, useState } from "react";
+import { SafeAreaView, StatusBar } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "./globals.css";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const router = useRouter();
+  const [appIsReady, setAppIsReady] = useState(true);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  useEffect(() => {
+    async function prepareApp() {
+      try {
+        // App initialization logic can go here
+      } catch (e) {
+        console.warn("Error preparing app:", e);
+      } finally {
+        setAppIsReady(true);
+        router.replace("/(screens)/onboardingScreen");
+      }
+    }
+
+    prepareApp();
+  }, [router]);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <UserProvider>
+        <NotificationProvider>
+          <StatusBar hidden={true} />
+          <SafeAreaView style={{ flex: 1 }}>
+            <Stack>
+              <Stack.Screen
+                name="(screens)/onboardingScreen"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(screens)/loginScreen"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(screens)/signUpScreen"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(screens)/selectRole"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(collector)"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(collector-screens)"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+          </SafeAreaView>
+        </NotificationProvider>
+      </UserProvider>
+    </GestureHandlerRootView>
   );
 }
